@@ -1,0 +1,29 @@
+name: Build and Package Docker Image
+
+on:
+  workflow_dispatch: # Cho phép bấm chạy thủ công từ giao diện GitHub Web
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build image with Docker Compose
+        run: |
+          docker compose build
+
+      - name: Save and compress Docker image
+        run: |
+          # Tìm tên image được sinh ra từ compose và đóng gói thành .tar.gz
+          IMAGE_NAME=$(docker compose config --images)
+          echo "Saving image: $IMAGE_NAME"
+          docker save "$IMAGE_NAME" | gzip > video_mcp_image.tar.gz
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-mcp-image
+          path: video_mcp_image.tar.gz
+          retention-days: 1
