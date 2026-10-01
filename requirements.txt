@@ -1,0 +1,7 @@
+fastapi>=0.115.0
+uvicorn>=0.30.0
+torch
+transformers>=4.45.0
+accelerate
+python-multipart
+mcp[cli]>=1.0.0

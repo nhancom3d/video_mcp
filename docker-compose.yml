@@ -1,0 +1,18 @@
+services:
+  whisper-media-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vi-whisper-mcp:latest
+    container_name: vi-whisper-mcp-server
+    restart: unless-stopped
+    ports:
+      - "8000:8000"   # Dùng chung 1 port cho cả REST API, Swagger UI và MCP SSE
+    environment:
+      - MODEL_ID=suzii/vi-whisper-large-v3-turbo
+      - HF_HOME=/root/.cache/huggingface
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./hf_cache:/root/.cache/huggingface
+      - ./media_data:/app/data
+    deploy:
